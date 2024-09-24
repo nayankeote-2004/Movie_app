@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final movie = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+    final movie = ModalRoute.of(context)!.settings.arguments as Map;
+    
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -13,12 +13,36 @@ class DetailsScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(movie['name'] ?? 'Unknown Title'),
-              background: movie['image'] != null
-                  ? Image.network(
-                      movie['image']['original'] ?? 'https://via.placeholder.com/500x750',
-                      fit: BoxFit.cover,
-                    )
-                  : Container(color: Colors.grey[800]),
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned.fill(
+                    top: MediaQuery.of(context).padding.top, // Add padding to top
+                    child: movie['image'] != null
+                        ? Image.network(
+                            movie['image']['original'] ?? 'https://via.placeholder.com/500x750',
+                            fit: BoxFit.cover,
+                          )
+                        : Container(color: Colors.grey[800]),
+                  ),
+                  // Gradient overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.7),
+                        ],
+                        stops: [0.0, 0.5, 1.0],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              titlePadding: EdgeInsets.only(left: 16, bottom: 16),
             ),
           ),
           SliverToBoxAdapter(
@@ -52,7 +76,7 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Genre: ${(movie['genres'] as List<dynamic>?)?.join(', ') ?? 'Not available'}',
+                    'Genre: ${(movie['genres'] as List?)?.join(', ') ?? 'Not available'}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[400]),
                   ),
                   SizedBox(height: 8),

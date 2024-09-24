@@ -14,7 +14,7 @@ class MovieApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MovieFlix',
+      title: 'Movie Hub',
       theme: ThemeData.dark().copyWith(
         primaryColor: Colors.red,
         scaffoldBackgroundColor: Colors.black,
